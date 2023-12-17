@@ -13,4 +13,7 @@ def main():
 		print("Directory not found")
 	else:
 		print("Hi {}".format(myPath))
-main()
+
+
+if __name__ == "__main__":
+	main()
