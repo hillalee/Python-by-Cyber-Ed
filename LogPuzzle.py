@@ -9,7 +9,7 @@
 import os
 import re
 import sys
-import urllib
+import urllib.request
 IDX = 6
 
 """Logpuzzle exercise
@@ -94,10 +94,6 @@ def main():
 
 	try:
 		download_images(img_urls, sys.argv[3])
-	except urllib.error.HTTPError as e:
-		print(f"HTTP Error {e.code}: {e.reason}")
-	except urllib.error.URLError as e:
-		print(f"URL Error: {e.reason}")
 	except Exception as e:
 		print("Error! {}".format(e) +'\n'.join(img_urls))
 
