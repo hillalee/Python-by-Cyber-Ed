@@ -24,14 +24,17 @@ def solution(parsed):
 	firstNum = float(parsed[0]) if '.' in parsed[0] else int(parsed[0])
 	secondNum = float(parsed[2]) if '.' in parsed[2] else int(parsed[2])
 
-	if parsed[1] == "+":
-		action, rc =  "+", firstNum + secondNum
-	if parsed[1] == "-":
-		action, rc = "-", firstNum - secondNum
-	if parsed[1] == "*":
-		action, rc = "*", firstNum * secondNum
-	if parsed[1] == "/":
-		action, rc = "/", firstNum / secondNum
+	try:
+		if parsed[1] == "+":
+			action, rc =  "+", firstNum + secondNum
+		if parsed[1] == "-":
+			action, rc = "-", firstNum - secondNum
+		if parsed[1] == "*":
+			action, rc = "*", firstNum * secondNum
+		if parsed[1] == "/":
+			action, rc = "/", firstNum / secondNum
+	except ZeroDivisionError:
+		return "Zero devition error\n"
 
 	endSolution = [str(firstNum), action, str(secondNum), "=", str(rc)]
 	joinedSolution = " ".join(endSolution) + "\n"
@@ -42,16 +45,17 @@ def check_input(user_input):
 	"""checks if user input is legal"""
 
 	# two false return points to make sure you can access the indexs
-	length = len(user_input) == 3
-	if not length:
-		return False
+	try:
+		length = len(user_input) == 3
+		action = user_input[1] in ["+", "-", "*", "/"]
+		nums = (user_input[0] and user_input[2]).isdecimal()
 
-	action = user_input[1] in ["+", "-", "*", "/"]
-	nums = (user_input[0] and user_input[2]).isdecimal()
-	zeroDev = user_input[2] == "0" and user_input[1] == "/"
+		if length and action and nums:
+			return True
 
-	if action and nums and not zeroDev:
-		return True
+	except IndexError:
+		print("Error! Exercise is too short, index is out of range")
+
 	return False
 
 
@@ -61,21 +65,29 @@ def check_path(givenPath):
 
 
 def main():
-	hwPath, slPath = sys.argv[HOMEWORK], sys.argv[SOLUTIONS]
-	checkHw, checkSl = check_path(hwPath), check_path(slPath)
-	if not checkHw or not checkSl:
-		print("Directory not found")
-	else:
-		with open(sys.argv[HOMEWORK], "r") as homework:
-			with open(sys.argv[SOLUTIONS], 'w') as solutions:
-				for line in homework:
-					exercise = parseExercise(line)
-					if check_input(exercise):
-						writeSolution = solution(exercise)
-						solutions.write(writeSolution)
-					else:
-						solutions.write("illegal text \n")
 
+	try:
+		hwPath, slPath = sys.argv[HOMEWORK], sys.argv[SOLUTIONS]
+		checkHw, checkSl = check_path(hwPath), check_path(slPath)
+		homework = open(sys.argv[HOMEWORK], "r")
+		solutions = open(sys.argv[SOLUTIONS], 'w')
+		for line in homework:
+			exercise = parseExercise(line)
+			if check_input(exercise):
+				writeSolution = solution(exercise)
+				solutions.write(writeSolution)
+			else:
+				solutions.write("Error! illegal text \n")
+
+		homework.close()
+		solutions.close()
+
+	except WindowsError:
+		print("Error! Directory not found")
+	except Exception as e:
+		print("Error! {}".format(e))
+	finally:
+		print("\n \t\t<< No smile! Only compile ಠ_ಠ >>")
 
 if __name__ == "__main__":
 	main()
