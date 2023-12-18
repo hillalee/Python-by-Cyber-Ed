@@ -96,6 +96,8 @@ def main():
 		download_images(img_urls, sys.argv[3])
 	except Exception as e:
 		print("Error! {}".format(e) +'\n'.join(img_urls))
+	finally:
+		print("\n \t\t<< No smile! Only compile ಠ_ಠ >>")
 
 
 if __name__ == '__main__':
