@@ -82,6 +82,7 @@ while not finish:
 			newPlaneslist.add(plane)
 		else:
 			collide = True # game over
+			finish = True
 
 	# move planes
 	for plane in newPlaneslist:
